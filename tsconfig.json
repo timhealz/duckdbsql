@@ -12,7 +12,8 @@
         "strict": true,
         "jsx": "react-jsx",
         "plugins": [{ "name": "typescript-plugin-css-modules" }],
-        "lib": ["es6", "es2020", "dom"]
+        "lib": ["es6", "es2020", "dom"],
+        "strictPropertyInitialization": false,
     },
     "exclude": ["./node_modules"],
     "include": ["./src/**/*", "./test/**/*", "./types/*.d.ts"]

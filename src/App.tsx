@@ -1,11 +1,16 @@
-import {createTheme, ThemeOptions} from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import * as React from 'react';
+
+import { createTheme, ThemeOptions } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@emotion/react';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack'
 
 import TopBar from './components/TopBar';
-
-import QueryEnvironment from './components/QueryEnvironment';
+import QueryEditor from './components/QueryEditor';
+import BottomPanel from "./components/BottomPanel";
+import { defaultQuery, DrawerHeader } from './constants'
+import { DuckDBProvider } from './lib/DuckDBProvider';
 
 
 export default function App() {
@@ -26,13 +31,30 @@ export default function App() {
     },
   });
 
-    return (
-        <ThemeProvider theme={theme}>
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <TopBar />
-            <QueryEnvironment />
+  const [query, setQuery] = React.useState(defaultQuery);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+  }
+
+  const dbProvider = new DuckDBProvider();
+
+  return (
+      <ThemeProvider theme={theme}>
+      <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <TopBar />
+          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <DrawerHeader />
+            <Stack
+                direction="column"
+                justifyContent="space-evenly"
+                spacing={1}
+            >
+                <QueryEditor query={query} handleChange={handleChange} />
+                <BottomPanel query={query} dbProvider={dbProvider} />
+            </Stack>
         </Box>
-        </ThemeProvider>
-    );
+      </Box>
+      </ThemeProvider>
+  );
 }

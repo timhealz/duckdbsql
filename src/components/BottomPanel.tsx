@@ -1,10 +1,12 @@
 import * as React from 'react';
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
+import { DuckDBProvider } from '../lib/DuckDBProvider';
 import OutputTable from './QueryOutput';
 import QueryRunButton from './QueryRunButton';
 
@@ -44,9 +46,10 @@ function a11yProps(index: number) {
 
 interface BottomPanelProps {
   query: string,
+  dbProvider: DuckDBProvider
 }
 
-export default function BottomPanel({ query }: BottomPanelProps) {
+export default function BottomPanel({ query, dbProvider }: BottomPanelProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -73,7 +76,7 @@ export default function BottomPanel({ query }: BottomPanelProps) {
         <QueryRunButton query={query}/>
       </Grid>
       <TabPanel value={value} index={0}>
-        <OutputTable />
+        <OutputTable dbProvider={dbProvider} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Query Logs
