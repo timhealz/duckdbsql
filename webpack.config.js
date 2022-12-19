@@ -8,7 +8,7 @@ export default {
   target: "web",
   mode: "production",
   entry: {
-    app: ["./src/index.tsx"],
+    app: ["./src/App.tsx"],
   },
   output: {
     path: path.resolve(__dirname, "./build/"),

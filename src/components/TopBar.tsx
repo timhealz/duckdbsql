@@ -19,7 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
 
-import { DrawerHeader } from '../constants'
+import { DrawerHeader } from '../utils/constants'
 
 
 const drawerWidth = 240;
