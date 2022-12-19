@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { createTheme, ThemeOptions } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@emotion/react';
 import Box from '@mui/material/Box';
@@ -11,26 +10,10 @@ import Editor from "@monaco-editor/react";
 import TopBar from './TopBar';
 import BottomPanel from "./BottomPanel";
 import { defaultQuery, DrawerHeader } from '../utils/constants';
+import { theme } from '../utils/styles'
 
 
 export default function QueryEnvironment() {
-  const theme: ThemeOptions = createTheme({
-    palette: {
-      primary: {
-        main: '#000000',
-      },
-      secondary: {
-        main: '#fff100',
-      },
-      background: {
-        default: '#ebebeb',
-      },
-      action: {
-        hover: '#fff100',
-      },
-    },
-  });
-
   const [query, setQuery] = React.useState(defaultQuery);
   function handleEditorChange(value: any, event:any) {
     setQuery(value);
@@ -39,7 +22,6 @@ export default function QueryEnvironment() {
   const editorOptions = {
     "scrollBeyondLastLine": false,
   };
-
 
   return (
       <ThemeProvider theme={theme}>
