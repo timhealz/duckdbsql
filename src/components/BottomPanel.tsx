@@ -1,14 +1,16 @@
 import * as React from 'react';
 
+import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import { DuckDBProvider } from '../lib/DuckDBProvider';
+import * as arrow from 'apache-arrow';
+
 import OutputTable from './QueryOutput';
-import QueryRunButton from './QueryRunButton';
+import { DuckDBProvider } from '../lib/DuckDBProvider';
 
 
 interface TabPanelProps {
@@ -46,14 +48,22 @@ function a11yProps(index: number) {
 
 interface BottomPanelProps {
   query: string,
-  dbProvider: DuckDBProvider
 }
 
-export default function BottomPanel({ query, dbProvider }: BottomPanelProps) {
+export default function BottomPanel({ query }: BottomPanelProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const dbProvider = new DuckDBProvider();
+  const [rows, setRows] = React.useState<(arrow.StructRow<any> | null)[]>();
+  const runQuery = async () => {
+    await dbProvider.initialize();
+    const result: arrow.Table = await dbProvider.runQuery(query);
+
+    setRows(result.toArray());
   };
 
   return (
@@ -73,10 +83,16 @@ export default function BottomPanel({ query, dbProvider }: BottomPanelProps) {
           <Tab label="Output" {...a11yProps(0)} />
           <Tab label="Logs" {...a11yProps(1)} />
         </Tabs>
-        <QueryRunButton query={query}/>
+        <Button
+            variant="contained"
+            color="secondary"
+            onClick={runQuery}
+        >
+            Run
+        </Button>
       </Grid>
       <TabPanel value={value} index={0}>
-        <OutputTable dbProvider={dbProvider} />
+        <OutputTable rows={rows}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         Query Logs

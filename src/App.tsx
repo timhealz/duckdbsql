@@ -4,13 +4,14 @@ import { createTheme, ThemeOptions } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@emotion/react';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack'
+import Stack from '@mui/material/Stack';
+
+import Editor from "@monaco-editor/react";
 
 import TopBar from './components/TopBar';
 import QueryEditor from './components/QueryEditor';
 import BottomPanel from "./components/BottomPanel";
-import { defaultQuery, DrawerHeader } from './constants'
-import { DuckDBProvider } from './lib/DuckDBProvider';
+import { defaultQuery, DrawerHeader } from './constants';
 
 
 export default function App() {
@@ -32,11 +33,14 @@ export default function App() {
   });
 
   const [query, setQuery] = React.useState(defaultQuery);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value);
+  function handleEditorChange(value: any, event:any) {
+    setQuery(value);
   }
 
-  const dbProvider = new DuckDBProvider();
+  const editorOptions = {
+    "scrollBeyondLastLine": false,
+  };
+
 
   return (
       <ThemeProvider theme={theme}>
@@ -50,8 +54,17 @@ export default function App() {
                 justifyContent="space-evenly"
                 spacing={1}
             >
-                <QueryEditor query={query} handleChange={handleChange} />
-                <BottomPanel query={query} dbProvider={dbProvider} />
+              <Box>
+                  <Editor
+                      value={query}
+                      onChange={handleEditorChange}
+                      language="sql"
+                      /*theme="vs-dark"*/
+                      height="50vh"
+                      options={editorOptions}
+                  />
+              </Box>
+              <BottomPanel query={query} />
             </Stack>
         </Box>
       </Box>

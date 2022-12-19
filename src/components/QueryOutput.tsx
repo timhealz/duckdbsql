@@ -47,9 +47,9 @@ interface Data {
 
 
 interface OutputTableProps {
-  dbProvider: DuckDBProvider
+  rows: (arrow.StructRow<any> | null)[] | undefined
 }
-export default function OutputTable({dbProvider}: OutputTableProps) {
+export default function OutputTable({ rows }: OutputTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -61,24 +61,6 @@ export default function OutputTable({dbProvider}: OutputTableProps) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  const [rows, setRows] = React.useState<(arrow.StructRow<any> | null)[]>();
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      await dbProvider.initialize();
-
-      const result: arrow.Table = await dbProvider.runQuery(`
-        SELECT
-          num
-        FROM generate_series(1, 100) t(num)
-      `);
-
-      setRows(result.toArray());
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
