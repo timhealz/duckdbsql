@@ -3,11 +3,18 @@ import * as ReactDOM from "react-dom";
 import QueryEnvironment from './components/QueryEnvironment';
 import reportWebVitals from './reportWebVitals';
 
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@emotion/react';
+import { theme } from './components/styles'
+
 
 const element = document.getElementById("root");
 ReactDOM.render(
     <React.StrictMode>
+        <ThemeProvider theme={theme}>
+        <CssBaseline />
         <QueryEnvironment />
+        </ThemeProvider>
     </React.StrictMode>,
     element
 );

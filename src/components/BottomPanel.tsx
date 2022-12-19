@@ -48,22 +48,22 @@ function a11yProps(index: number) {
 
 interface BottomPanelProps {
   query: string,
+  dbProvider: DuckDBProvider,
 }
 
-export default function BottomPanel({ query }: BottomPanelProps) {
+export default function BottomPanel({ query, dbProvider }: BottomPanelProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const dbProvider = new DuckDBProvider();
-  const [rows, setRows] = React.useState<(arrow.StructRow<any> | null)[]>();
+  const [queryResult, setQueryResult] = React.useState<(arrow.Table)>();
   const runQuery = async () => {
     await dbProvider.initialize();
     const result: arrow.Table = await dbProvider.runQuery(query);
 
-    setRows(result.toArray());
+    setQueryResult(result);
   };
 
   return (
@@ -92,7 +92,7 @@ export default function BottomPanel({ query }: BottomPanelProps) {
         </Button>
       </Grid>
       <TabPanel value={value} index={0}>
-        <OutputTable rows={rows}/>
+        <OutputTable queryResult={queryResult}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         Query Logs

@@ -10,7 +10,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 import * as arrow from 'apache-arrow'
-import { DuckDBProvider } from '../lib/DuckDBProvider';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -47,9 +46,9 @@ interface Data {
 
 
 interface OutputTableProps {
-  rows: (arrow.StructRow<any> | null)[] | undefined
+  queryResult: arrow.Table<any> | undefined
 }
-export default function OutputTable({ rows }: OutputTableProps) {
+export default function OutputTable({ queryResult }: OutputTableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -80,7 +79,7 @@ export default function OutputTable({ rows }: OutputTableProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {queryResult?.toArray().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row?.toString()}>
