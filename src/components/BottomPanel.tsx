@@ -11,6 +11,7 @@ import * as arrow from 'apache-arrow';
 
 import OutputTable from './QueryOutput';
 import { DuckDBProvider } from '../lib/DuckDBProvider';
+import { makeTable } from 'apache-arrow';
 
 
 interface TabPanelProps {
@@ -58,7 +59,11 @@ export default function BottomPanel({ query, dbProvider }: BottomPanelProps) {
     setValue(newValue);
   };
 
-  const [queryResult, setQueryResult] = React.useState<(arrow.Table)>();
+  const [queryResult, setQueryResult] = React.useState(
+    makeTable({
+      num: new Int8Array([1, 2, 3]),
+    })
+  );
   const runQuery = async () => {
     await dbProvider.initialize();
     const result: arrow.Table = await dbProvider.runQuery(query);

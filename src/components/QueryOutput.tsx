@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
@@ -11,42 +11,11 @@ import TableRow from '@mui/material/TableRow';
 
 import * as arrow from 'apache-arrow'
 
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-interface Column {
-  id: 'num';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  format?: (value: number) => string;
-}
-
-const columns: readonly Column[] = [
-  {
-    id: 'num',
-    label: 'Num',
-    minWidth: 170,
-    align: 'right',
-    format: (value: number) => value.toLocaleString('en-US'),
-  }
-];
-
-interface Data {
-  num: number
-}
+import { StyledTableCell } from './styles'
 
 
 interface OutputTableProps {
-  queryResult: arrow.Table<any> | undefined
+  queryResult: arrow.Table
 }
 export default function OutputTable({ queryResult }: OutputTableProps) {
   const [page, setPage] = React.useState(0);
@@ -67,35 +36,39 @@ export default function OutputTable({ queryResult }: OutputTableProps) {
         <Table stickyHeader size="small" aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {queryResult.schema.fields.map((column) => (
                 <StyledTableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  key={column.name}
+                  align="left"
+                  style={{ minWidth: 170 }}
                 >
-                  {column.label}
+                  {column.name}
                 </StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {queryResult?.toArray().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {queryResult.toArray()
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row?.toString()}>
-                    {columns.map((column) => {
-                      const value = row?.toString();
-                      return (
-                        <StyledTableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </StyledTableCell>
-                      );
-                    })}
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row?.rowIndex}>
+                    {
+                      row?.toArray().map((value, index) => {
+                        return (
+                          <StyledTableCell
+                            key={queryResult.schema.fields[index].toString()}
+                            align="left"
+                            style={{ minWidth: 170 }}
+                          >
+                            {value.toString()}
+                          </StyledTableCell>
+                        );
+                      })
+                    }
                   </TableRow>
                 );
-              })}
+            })}
           </TableBody>
         </Table>
       </TableContainer>

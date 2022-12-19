@@ -5,10 +5,10 @@ import Stack from '@mui/material/Stack';
 
 import Editor from "@monaco-editor/react";
 
-import { DrawerHeader } from './styles';
 import TopBar from './TopBar';
 import BottomPanel from "./BottomPanel";
 import { DuckDBProvider } from '../lib/DuckDBProvider';
+import { DrawerHeader } from './styles';
 
 
 const defaultQuery = `/* Quack */
