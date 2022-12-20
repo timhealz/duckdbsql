@@ -11,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 
 import * as arrow from 'apache-arrow'
 
-import { StyledTableCell } from './styles'
+import { StyledTableCell } from '../utils/styles'
 
 
 interface OutputTableProps {

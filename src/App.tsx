@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from './components/styles'
+import { theme } from './utils/styles'
 
 
 const element = document.getElementById("root");
