@@ -7,29 +7,31 @@ import duckdb_wasm from "@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm";
 import duckdb_wasm_eh from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm";
 
 
+const DUCKDB_BUNDLES: duckdb.DuckDBBundles = {
+  mvp: {
+    mainModule: duckdb_wasm,
+    mainWorker: new URL(
+      "@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js",
+      import.meta.url
+    ).toString(),
+  },
+  eh: {
+    mainModule: duckdb_wasm_eh,
+    mainWorker: new URL(
+      "@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js",
+      import.meta.url
+    ).toString(),
+  },
+};
+
 export class DuckDBProvider {
 
     db: duckdb.AsyncDuckDB
 
-    public async initialize() {
-      const DUCKDB_BUNDLES: duckdb.DuckDBBundles = {
-        mvp: {
-          mainModule: duckdb_wasm,
-          mainWorker: new URL(
-            "@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js",
-            import.meta.url
-          ).toString(),
-        },
-        eh: {
-          mainModule: duckdb_wasm_eh,
-          mainWorker: new URL(
-            "@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js",
-            import.meta.url
-          ).toString(),
-        },
-      };
+    constructor() {}
 
-        // Select a bundle based on browser checks
+    public async initialize() {
+      // Select a bundle based on browser checks
       const bundle = await duckdb.selectBundle(DUCKDB_BUNDLES);
       
       // Instantiate the asynchronus version of DuckDB-wasm
@@ -40,11 +42,11 @@ export class DuckDBProvider {
     }
 
     public async runQuery(query: string) {
-        const conn = await this.db.connect();
-        const result: arrow.Table = await conn.query(query);
-        await conn.close();
+      const conn = await this.db.connect();
+      const result: arrow.Table = await conn.query(query);
+      await conn.close();
 
-        return result;
+      return result;
     }
 }
 

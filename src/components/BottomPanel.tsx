@@ -7,10 +7,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import * as arrow from 'apache-arrow';
+import * as duckdb from "@duckdb/duckdb-wasm";
+
+import * as arrow from "apache-arrow";
 
 import OutputTable from './QueryOutput';
-import { DuckDBProvider } from '../lib/DuckDBProvider';
 import { makeTable } from 'apache-arrow';
 
 
@@ -49,25 +50,26 @@ function a11yProps(index: number) {
 
 interface BottomPanelProps {
   query: string,
-  dbProvider: DuckDBProvider,
+  db: Promise<duckdb.AsyncDuckDB> | undefined,
 }
 
-export default function BottomPanel({ query, dbProvider }: BottomPanelProps) {
+export default function BottomPanel({ query, db }: BottomPanelProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const [queryResult, setQueryResult] = React.useState(
+  const [queryResult, setQueryResult] = React.useState<arrow.Table<any> | undefined>(
     makeTable({
-      num: new Int8Array([1, 2, 3]),
+      key: new Int8Array([1, 2, 3]),
+      val: new Int8Array([1, 2, 3]),
     })
   );
   const runQuery = async () => {
-    await dbProvider.initialize();
-    const result: arrow.Table = await dbProvider.runQuery(query);
-
+    const conn = await db?.then(d => d.connect());
+    const result: arrow.Table | undefined = await conn?.query(query);
+    await conn?.close();
     setQueryResult(result);
   };
 

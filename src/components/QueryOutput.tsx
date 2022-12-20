@@ -15,7 +15,7 @@ import { StyledTableCell } from './styles'
 
 
 interface OutputTableProps {
-  queryResult: arrow.Table
+  queryResult: arrow.Table<any> | undefined
 }
 export default function OutputTable({ queryResult }: OutputTableProps) {
   const [page, setPage] = React.useState(0);
@@ -36,7 +36,7 @@ export default function OutputTable({ queryResult }: OutputTableProps) {
         <Table stickyHeader size="small" aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {queryResult.schema.fields.map((column) => (
+              {queryResult?.schema.fields.map((column) => (
                 <StyledTableCell
                   key={column.name}
                   align="left"
@@ -48,7 +48,7 @@ export default function OutputTable({ queryResult }: OutputTableProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {queryResult.toArray()
+            {queryResult?.toArray()
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
