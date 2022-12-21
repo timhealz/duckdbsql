@@ -14,9 +14,9 @@ import { defaultQuery, initializeDuckDb } from '../utils/db'
 
 
 export default function QueryEnvironment() {
-  const [query, setQuery] = React.useState(defaultQuery);
+  const [activeQuery, setActiveQuery] = React.useState(defaultQuery);
   function handleEditorChange(value: any, event:any) {
-    setQuery(value);
+    setActiveQuery(value);
   }
 
   const [db, setDb] = React.useState<Promise<duckdb.AsyncDuckDB>>()
@@ -36,7 +36,7 @@ export default function QueryEnvironment() {
           >
             <Box>
                 <Editor
-                    value={query}
+                    value={activeQuery}
                     onChange={handleEditorChange}
                     language="sql"
                     /*theme="vs-dark"*/
@@ -46,7 +46,7 @@ export default function QueryEnvironment() {
                     }}
                 />
             </Box>
-            <BottomPanel query={query} db={db} />
+            <BottomPanel activeQuery={activeQuery} setActiveQuery={setActiveQuery} db={db} />
           </Stack>
       </Box>
     </Box>

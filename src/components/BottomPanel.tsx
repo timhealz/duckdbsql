@@ -13,6 +13,8 @@ import * as arrow from "apache-arrow";
 
 import OutputTable from './QueryOutput';
 import { makeTable } from 'apache-arrow';
+import QueryLog from './QueryLog';
+import { ExecutedQuery } from './types';
 
 
 interface TabPanelProps {
@@ -48,16 +50,18 @@ function a11yProps(index: number) {
   };
 }
 
+let nextId = 1;
+
 interface BottomPanelProps {
-  query: string,
+  activeQuery: string,
+  setActiveQuery: React.Dispatch<React.SetStateAction<string>>,
   db: Promise<duckdb.AsyncDuckDB> | undefined,
 }
 
-export default function BottomPanel({ query, db }: BottomPanelProps) {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+export default function BottomPanel({ activeQuery, setActiveQuery, db }: BottomPanelProps) {
+  const [tabIndex, settabIndex] = React.useState(0);
+  const handleChange = (event: React.SyntheticEvent, newtabIndex: number) => {
+    settabIndex(newtabIndex);
   };
 
   const [queryResult, setQueryResult] = React.useState<arrow.Table<any> | undefined>(
@@ -66,12 +70,7 @@ export default function BottomPanel({ query, db }: BottomPanelProps) {
       val: new Int8Array([1, 2, 3]),
     })
   );
-  const runQuery = async () => {
-    const conn = await db?.then(d => d.connect());
-    const result: arrow.Table | undefined = await conn?.query(query);
-    await conn?.close();
-    setQueryResult(result);
-  };
+  const [queryHistory, setQueryHistory] = React.useState<ExecutedQuery[]>([]);
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -83,7 +82,7 @@ export default function BottomPanel({ query, db }: BottomPanelProps) {
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
         <Tabs
-          value={value}
+          value={tabIndex}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
@@ -93,16 +92,35 @@ export default function BottomPanel({ query, db }: BottomPanelProps) {
         <Button
             variant="contained"
             color="secondary"
-            onClick={runQuery}
-        >
+            onClick={
+              async () => {
+                const conn = await db?.then(d => d.connect());
+                const startTime = Date.now();
+                const result: arrow.Table | undefined = await conn?.query(activeQuery);
+                const endTime = Date.now();
+                await conn?.close();
+
+                setQueryResult(result);
+                settabIndex(0);
+                setQueryHistory([
+                  {
+                    id: nextId++,
+                    text: activeQuery,
+                    startTime: new Date(startTime).toLocaleString(),
+                    duration: endTime - startTime
+                  },
+                  ...queryHistory,
+                ]);
+              }
+            }>
             Run
         </Button>
       </Grid>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={tabIndex} index={0}>
         <OutputTable queryResult={queryResult}/>
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        Query Logs
+      <TabPanel value={tabIndex} index={1}>
+        <QueryLog queryHistory={queryHistory} setActiveQuery={setActiveQuery} />
       </TabPanel>
     </Box>
   );
