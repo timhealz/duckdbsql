@@ -20,6 +20,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
 
 import { DrawerHeader } from '../utils/styles'
+import DataSourceConfig from './DataSourceConfig';
 
 
 const drawerWidth = 240;
@@ -98,6 +99,16 @@ export default function TopBar() {
     setOpen(false);
   };
 
+  const [dataSourcesOpen, setDataSourcesOpen] = React.useState(false);
+
+  const handleDataSourcesOpen = () => {
+    setDataSourcesOpen(true);
+  };
+
+  const handleDataSourcesClose = () => {
+    setDataSourcesOpen(false);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -128,13 +139,14 @@ export default function TopBar() {
         </DrawerHeader>
         <Divider />
           <List>
-              <ListItem key="Connections" disablePadding sx={{ display: 'block' }}>
+              <ListItem key="Data Sources" disablePadding sx={{ display: 'block' }}>
                   <ListItemButton
-                  sx={{
-                      minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
-                      px: 2.5,
-                  }}
+                    onClick={handleDataSourcesOpen}
+                    sx={{
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                    }}
                   >
                   <ListItemIcon
                       sx={{
@@ -145,8 +157,9 @@ export default function TopBar() {
                   >
                       <ElectricalServicesIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Connections" sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary="Data Sources" sx={{ opacity: open ? 1 : 0 }} />
                   </ListItemButton>
+                  <DataSourceConfig open={dataSourcesOpen} handleClose={handleDataSourcesClose} />
               </ListItem>
           </List>
           <Divider />

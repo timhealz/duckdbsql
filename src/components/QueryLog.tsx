@@ -50,6 +50,11 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                         "minimap": {"enabled": false}
                     }}
                 />
+                {executedQuery.status === "ERROR" &&
+                   <Typography variant="body2" color="error">
+                    {executedQuery.error?.message}
+                   </Typography>
+                }
                 </CardContent>
                 <Stack
                     direction="row"
@@ -58,12 +63,7 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                     sx={{ "paddingRight": "10px"}}
                 >
                     <CardActions>
-                        <Button
-                            size="small"
-                            onClick={() => {
-                                setActiveQuery(executedQuery.text)
-                            }
-                        }>
+                        <Button size="small" onClick={() => {setActiveQuery(executedQuery.text)}}>
                             Revert
                         </Button>
                     </CardActions>
@@ -76,12 +76,12 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                     <Chip
                         icon={<TimerOutlinedIcon />}
                         label={executedQuery.duration + " ms"}
-                        color="success"
+                        color={executedQuery.status === "SUCCESS" ? "success" : "error"}
                     />
                     <Chip
                         icon={<DatasetOutlinedIcon />}
                         label={executedQuery.data?.numRows?.toLocaleString('en-US') + " rows"}
-                        color="success"
+                        color={executedQuery.status === "SUCCESS" ? "success" : "error"}
                     />
                     </Stack>
                 </Stack>

@@ -61,7 +61,7 @@ export async function runQuery(db: Promise<duckdb.AsyncDuckDB> | undefined, quer
   } catch (e) {
     if (e instanceof Error) {
       error = e;
-      status = "FAILURE"
+      status = "ERROR"
     }
   }
 
