@@ -1,19 +1,25 @@
 import { createTheme, ThemeOptions, styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
+
+const DUCKDB_YELLOW: string = "#fff100"
+
 export const theme: ThemeOptions = createTheme({
   palette: {
       primary: {
-      main: '#000000',
+        main: "#000000",
       },
       secondary: {
-      main: '#fff100',
+        main: DUCKDB_YELLOW,
+      },
+      error: {
+        main: "#d32f2f",
       },
       background: {
-      default: '#ebebeb',
+        default: "#ebebeb",
       },
       action: {
-      hover: '#fff100',
+        hover: DUCKDB_YELLOW,
       },
   },
 });

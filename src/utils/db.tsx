@@ -4,6 +4,9 @@ import duckdb_wasm from "@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm";
 // @ts-ignore  
 import duckdb_wasm_eh from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm";
 
+import * as arrow from 'apache-arrow'
+
+import { ExecutedQuery } from './types';
 
 export const defaultQuery = `/* Quack */
 
@@ -29,7 +32,7 @@ const DUCKDB_BUNDLES: duckdb.DuckDBBundles = {
   },
 };
 
-export const initializeDuckDb = async () => {
+export const duckDb = async () => {
   // Select a bundle based on browser checks
   const bundle = await duckdb.selectBundle(DUCKDB_BUNDLES);
 
@@ -40,4 +43,38 @@ export const initializeDuckDb = async () => {
   await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
   return db;
+}
+
+let nextId = 1;
+export async function runQuery(db: Promise<duckdb.AsyncDuckDB> | undefined, query: string) {
+  const startTime = Date.now();
+  const conn = await db?.then(d => d.connect());
+
+  let result: arrow.Table | undefined;
+  let error: Error | undefined;
+  let status: string = "UNKNOWN";
+
+  try {
+    result = await conn?.query(query);
+    status = "SUCCESS"
+
+  } catch (e) {
+    if (e instanceof Error) {
+      error = e;
+      status = "FAILURE"
+    }
+  }
+
+  const endTime = Date.now();
+  await conn?.close();
+
+  return {
+    id: nextId++,
+    text: query,
+    data: result,
+    startTime: new Date(startTime).toLocaleString(),
+    duration: endTime - startTime,
+    status: status,
+    error: error
+  }
 }

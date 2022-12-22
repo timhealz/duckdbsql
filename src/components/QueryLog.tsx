@@ -5,9 +5,12 @@ import CardContent from '@mui/material/CardContent';
 import Editor from "@monaco-editor/react";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Stack } from '@mui/material';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import DatasetOutlinedIcon from '@mui/icons-material/DatasetOutlined';
 
-import { ExecutedQuery } from './types';
+import { ExecutedQuery } from '../utils/types';
 
 
 interface QueryLogProps {
@@ -26,24 +29,17 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
             <Card sx={{ width: "100%" }}>
                 <CardContent>
                 <Stack
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                >
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                > 
                     <Typography gutterBottom variant="h6" component="div">
-                    Query {executedQuery.id}
+                        Query {executedQuery.id}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Rows returned: {executedQuery.numRows?.toLocaleString('en-US')}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Start Time: {executedQuery.startTime}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Duration: {executedQuery.duration} ms
+                        {executedQuery.startTime}
                     </Typography>
                 </Stack>
-                </CardContent>
                 <Editor
                     value={executedQuery.text}
                     language="sql"
@@ -54,16 +50,41 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                         "minimap": {"enabled": false}
                     }}
                 />
-                <CardActions>
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            setActiveQuery(executedQuery.text)
-                        }
-                    }>
-                        Revert
-                    </Button>
-                </CardActions>
+                </CardContent>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ "paddingRight": "10px"}}
+                >
+                    <CardActions>
+                        <Button
+                            size="small"
+                            onClick={() => {
+                                setActiveQuery(executedQuery.text)
+                            }
+                        }>
+                            Revert
+                        </Button>
+                    </CardActions>
+                    <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={2}
+                    >
+                    <Chip
+                        icon={<TimerOutlinedIcon />}
+                        label={executedQuery.duration + " ms"}
+                        color="success"
+                    />
+                    <Chip
+                        icon={<DatasetOutlinedIcon />}
+                        label={executedQuery.data?.numRows?.toLocaleString('en-US') + " rows"}
+                        color="success"
+                    />
+                    </Stack>
+                </Stack>
             </Card>
         ))}
         </Stack>

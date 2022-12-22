@@ -10,11 +10,12 @@ import Grid from '@mui/material/Grid';
 import * as duckdb from "@duckdb/duckdb-wasm";
 
 import * as arrow from "apache-arrow";
+import { makeTable } from 'apache-arrow';
 
 import OutputTable from './QueryOutput';
-import { makeTable } from 'apache-arrow';
 import QueryLog from './QueryLog';
-import { ExecutedQuery } from './types';
+import { runQuery } from '../utils/db';
+import { ExecutedQuery } from '../utils/types';
 
 
 interface TabPanelProps {
@@ -49,8 +50,6 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-
-let nextId = 1;
 
 interface BottomPanelProps {
   activeQuery: string,
@@ -94,24 +93,17 @@ export default function BottomPanel({ activeQuery, setActiveQuery, db }: BottomP
             color="secondary"
             onClick={
               async () => {
-                const conn = await db?.then(d => d.connect());
-                const startTime = Date.now();
-                const result: arrow.Table | undefined = await conn?.query(activeQuery);
-                const endTime = Date.now();
-                await conn?.close();
+                const result: ExecutedQuery = await runQuery(db, activeQuery);
 
-                setQueryResult(result);
-                settabIndex(0);
-                setQueryHistory([
-                  {
-                    id: nextId++,
-                    text: activeQuery,
-                    numRows: result?.numRows,
-                    startTime: new Date(startTime).toLocaleString(),
-                    duration: endTime - startTime
-                  },
-                  ...queryHistory,
-                ]);
+                setQueryResult(result.data);
+
+                if (typeof result.error === 'undefined') {
+                  settabIndex(0);
+                } else {
+                  settabIndex(1);
+                }
+                
+                setQueryHistory([result, ...queryHistory]);
               }
             }>
             Run

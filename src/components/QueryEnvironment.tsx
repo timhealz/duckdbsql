@@ -10,7 +10,7 @@ import * as duckdb from "@duckdb/duckdb-wasm";
 import TopBar from './TopBar';
 import BottomPanel from "./BottomPanel";
 import { DrawerHeader } from '../utils/styles';
-import { defaultQuery, initializeDuckDb } from '../utils/db'
+import { defaultQuery, duckDb } from '../utils/db'
 
 
 export default function QueryEnvironment() {
@@ -21,7 +21,7 @@ export default function QueryEnvironment() {
 
   const [db, setDb] = React.useState<Promise<duckdb.AsyncDuckDB>>()
   React.useEffect(() => {
-    setDb(initializeDuckDb())
+    setDb(duckDb())
   }, [])
 
   return (
