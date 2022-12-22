@@ -106,6 +106,7 @@ export default function BottomPanel({ activeQuery, setActiveQuery, db }: BottomP
                   {
                     id: nextId++,
                     text: activeQuery,
+                    numRows: result?.numRows,
                     startTime: new Date(startTime).toLocaleString(),
                     duration: endTime - startTime
                   },

@@ -18,7 +18,7 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
     return (
         <Stack
             direction="column"
-            justifyContent="center"
+            justifyContent="flex-start"
             alignItems="flex-start"
             spacing={2}
         >
@@ -27,12 +27,14 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                 <CardContent>
                 <Stack
                     direction="column"
-                    justifyContent="center"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
-                    spacing={2}
                 >
                     <Typography gutterBottom variant="h6" component="div">
                     Query {executedQuery.id}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Rows returned: {executedQuery.numRows?.toLocaleString('en-US')}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         Start Time: {executedQuery.startTime}
@@ -40,18 +42,18 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                     <Typography variant="body2" color="text.secondary">
                         Duration: {executedQuery.duration} ms
                     </Typography>
-                    <Editor
-                        value={executedQuery.text}
-                        language="sql"
-                        height="15vh"
-                        options={{
-                          "readOnly": true,
-                          "scrollBeyondLastLine": false,
-                          "minimap": {"enabled": false}
-                        }}
-                    />
                 </Stack>
                 </CardContent>
+                <Editor
+                    value={executedQuery.text}
+                    language="sql"
+                    height="15vh"
+                    options={{
+                        "readOnly": true,
+                        "scrollBeyondLastLine": false,
+                        "minimap": {"enabled": false}
+                    }}
+                />
                 <CardActions>
                     <Button
                         size="small"
