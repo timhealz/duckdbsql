@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -58,6 +59,8 @@ interface BottomPanelProps {
 }
 
 export default function BottomPanel({ activeQuery, setActiveQuery, db }: BottomPanelProps) {
+  const theme = useTheme();
+
   const [tabIndex, settabIndex] = React.useState(0);
   const handleChange = (event: React.SyntheticEvent, newtabIndex: number) => {
     settabIndex(newtabIndex);
@@ -82,6 +85,8 @@ export default function BottomPanel({ activeQuery, setActiveQuery, db }: BottomP
       >
         <Tabs
           value={tabIndex}
+          textColor={theme.palette.mode === 'dark' ? "secondary" : "primary"}
+          indicatorColor={theme.palette.mode === 'dark' ? "secondary" : "primary"}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
@@ -91,6 +96,7 @@ export default function BottomPanel({ activeQuery, setActiveQuery, db }: BottomP
         <Button
             variant="contained"
             color="secondary"
+            sx={{ "marginRight": "10px" }}
             onClick={
               async () => {
                 const result: ExecutedQuery = await runQuery(db, activeQuery);

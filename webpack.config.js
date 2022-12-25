@@ -19,7 +19,7 @@ export default {
     clean: true,
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".mjs", ".jsx", ".css", ".wasm"],
+    extensions: [".ts", ".tsx", ".js", ".mjs", ".jsx", ".css", ".wasm", ".svg", ".ico"],
   },
   module: {
     rules: [
@@ -51,6 +51,10 @@ export default {
             },
           },
         ],
+      },      
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
       },
     ],
   },
