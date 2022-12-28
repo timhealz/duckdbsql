@@ -1,4 +1,6 @@
 import * as React from 'react';
+
+import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -18,6 +20,8 @@ interface QueryLogProps {
     setActiveQuery: React.Dispatch<React.SetStateAction<string>>
 }
 export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps) {
+    const theme = useTheme();
+    
     return (
         <Stack
             direction="column"
@@ -40,9 +44,16 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                         {executedQuery.startTime}
                     </Typography>
                 </Stack>
+                <Stack
+                    direction="column"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                > 
                 <Editor
                     value={executedQuery.text}
                     language="sql"
+                    theme={theme.palette.mode === 'dark' ? "vs-dark" : "light"}
                     height="15vh"
                     options={{
                         "readOnly": true,
@@ -55,6 +66,7 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                     {executedQuery.error?.message}
                    </Typography>
                 }
+                </Stack>
                 </CardContent>
                 <Stack
                     direction="row"
@@ -63,7 +75,11 @@ export default function QueryLog({ queryHistory, setActiveQuery }: QueryLogProps
                     sx={{ "paddingRight": "10px"}}
                 >
                     <CardActions>
-                        <Button size="small" onClick={() => {setActiveQuery(executedQuery.text)}}>
+                        <Button
+                            size="small"
+                            color="inherit"
+                            onClick={() => {setActiveQuery(executedQuery.text)}}
+                        >
                             Revert
                         </Button>
                     </CardActions>

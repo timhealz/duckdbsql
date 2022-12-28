@@ -13,7 +13,6 @@ import { defaultQuery, duckDb } from '../utils/db'
 import { Paper } from '@mui/material';
 
 
-
 export default function QueryEnvironment() {
   const theme = useTheme();
 
@@ -26,7 +25,7 @@ export default function QueryEnvironment() {
   React.useEffect(() => {
     setDb(duckDb())
   }, [])
-
+  
   return (
     <Stack               
       direction="column"

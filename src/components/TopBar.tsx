@@ -13,9 +13,11 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
 
 import { ColorModeContext } from './ColorModeContext';
 import { Search, SearchIconWrapper, StyledInputBase } from '../utils/styles'
+import DataSourceDialog from './DataSourceDialog';
 
 
 export default function TopBar() {
@@ -86,7 +88,14 @@ export default function TopBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        <IconButton>
+          <ElectricalServicesIcon />
+        </IconButton>
+        <IconButton
+          color="inherit"
+          onClick={colorMode.toggleColorMode}
+          sx={{ ml: 1 }}
+        >
           {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
       </MenuItem>
@@ -104,6 +113,16 @@ export default function TopBar() {
       </MenuItem>
     </Menu>
   );
+
+  const [dataSourceOpen, setDataSourceOpen] = React.useState(false);
+
+  const handleDataSourceClickOpen = () => {
+    setDataSourceOpen(true);
+  };
+
+  const handleDataSourceClose = () => {
+    setDataSourceOpen(false);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -136,7 +155,21 @@ export default function TopBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+            <IconButton
+              color="inherit"
+              sx={{ ml: 1 }}
+            >
+              <ElectricalServicesIcon onClick={handleDataSourceClickOpen} />
+              <DataSourceDialog
+                open={dataSourceOpen}
+                handleClose={handleDataSourceClose} 
+              />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={colorMode.toggleColorMode}
+              sx={{ ml: 1 }}
+              >
               {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
             <IconButton
