@@ -5,7 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
 
-export default function DataSourceConfigCSV() {
+export default function DataSourceConfigJSON() {
     return (
         <Stack
             component="form"
@@ -18,20 +18,15 @@ export default function DataSourceConfigCSV() {
         >
             <TextField
                 id="filled-basic"
-                label="Delimiter"
+                label="Schema"
                 variant="filled"
                 sx={{ "width": "20ch" }}
             />
             <TextField
                 id="filled-basic"
-                label="Quote Character"
+                label="Shape"
                 variant="filled"
                 sx={{ "width": "20ch" }}
-            />
-            <FormControlLabel
-                label="Header row"
-                color="secondary"
-                control={<Switch defaultChecked />}
             />
         </Stack>
     );

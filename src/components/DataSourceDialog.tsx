@@ -17,7 +17,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
+import DataSourceConfigArrow from './DataSourceConfigArrow';
 import DataSourceConfigCSV from './DataSourceConfigCSV';
+import DataSourceConfigJSON from './DataSourceConfigJSON';
 
 
 interface DataSourceConfigProps {
@@ -64,9 +66,9 @@ export default function DataSourceDialog({ open, handleClose }: DataSourceConfig
                           label="Data Source type"
                           onChange={handleDataSourceTypeChange}
                       >
-                        <MenuItem value={10}>CSV</MenuItem>
-                        <MenuItem value={20}>JSON</MenuItem>
-                        <MenuItem value={30}>Arrow</MenuItem>
+                        <MenuItem value={10}>Arrow</MenuItem>
+                        <MenuItem value={20}>CSV</MenuItem>
+                        <MenuItem value={30}>JSON</MenuItem>
                       </Select>
                     </FormControl>
                     <Box sx={{ mb: 2 }}>
@@ -98,7 +100,9 @@ export default function DataSourceDialog({ open, handleClose }: DataSourceConfig
                 <StepContent>
                   {
                     {
-                      '10': <DataSourceConfigCSV />,
+                      '10': <DataSourceConfigArrow />,
+                      '20': <DataSourceConfigCSV />,
+                      '30': <DataSourceConfigJSON />,
                     }[dataSourceType]
                   }
                   <Box sx={{ mb: 2 }}>
