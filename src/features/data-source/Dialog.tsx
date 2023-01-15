@@ -17,9 +17,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import DataSourceConfigArrow from './DataSourceConfigArrow';
-import DataSourceConfigCSV from './DataSourceConfigCSV';
-import DataSourceConfigJSON from './DataSourceConfigJSON';
+import DataSourceConfigArrow from './components/ConfigArrow';
+import DataSourceConfigCSV from './components/ConfigCSV';
+import DataSourceConfigJSON from './components/ConfigJSON';
 
 
 interface DataSourceConfigProps {

@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import DatasetOutlinedIcon from '@mui/icons-material/DatasetOutlined';
 
-import { ExecutedQuery } from '../utils/types';
+import { ExecutedQuery } from '../types/ExecutedQuery';
 
 
 interface QueryLogProps {

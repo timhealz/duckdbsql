@@ -13,10 +13,10 @@ import * as duckdb from "@duckdb/duckdb-wasm";
 import * as arrow from "apache-arrow";
 import { makeTable } from 'apache-arrow';
 
-import OutputTable from './QueryOutput';
+import OutputTable from './QueryOutputTable';
 import QueryLog from './QueryLog';
-import { runQuery } from '../utils/db';
-import { ExecutedQuery } from '../utils/types';
+import { runQuery } from '../lib/db';
+import { ExecutedQuery } from '../types/ExecutedQuery';
 
 
 interface TabPanelProps {

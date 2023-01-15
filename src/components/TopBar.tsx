@@ -17,7 +17,7 @@ import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
 
 import { ColorModeContext } from './ColorModeContext';
 import { Search, SearchIconWrapper, StyledInputBase } from '../utils/styles'
-import DataSourceDialog from './DataSourceDialog';
+import DataSourceDialog from '../features/data-source/Dialog';
 
 
 export default function TopBar() {

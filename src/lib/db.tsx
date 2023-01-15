@@ -6,9 +6,9 @@ import duckdb_wasm_eh from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm";
 
 import * as arrow from 'apache-arrow'
 
-import { ExecutedQuery } from './types';
 
-export const defaultQuery = `/* Quack */
+export const defaultQuery = `
+/* Quack */
 
 SELECT
   num
